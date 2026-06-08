@@ -34,6 +34,38 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Shared button theme — white on brand blue, hover to white on black. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-kawa-accent-strong);
+  background-color: var(--color-kawa-accent-strong);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+.btn-primary:hover {
+  background-color: #000;
+  border-color: var(--color-kawa-accent);
+  color: #fff;
+}
+/* When a .btn-primary link sits inside article prose, beat `.prose a`. */
+.prose a.btn-primary {
+  color: #fff;
+  text-decoration: none;
+}
+.prose a.btn-primary:hover {
+  color: #fff;
+}
+
 /* Long-form article typography, kept dependency-free. */
 .prose {
   max-width: 70ch;

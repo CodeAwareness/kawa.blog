@@ -117,7 +117,7 @@ Following the website's convention:
 <Hl c="blue">intent</Hl>         {/* blue  — like .highlight */}
 ```
 
-- `ComparisonTable` — `headers` + `rows` arrays, optional `highlightColumn`
+- `ComparisonTable` — `headers` + `rows` arrays, optional `highlightColumn` (blue column tint) and `highlightRow` (gold row, e.g. the Kawa Code row)
 - `ProductScreenshot` — `src` (imported image) + `alt` + optional `caption`
 - `AuthorBox` — `name` + optional `role` / `bio` / `avatar`
 - `RelatedPosts` is rendered automatically at the foot of every post (same language, ranked by shared tags).

@@ -1,0 +1,146 @@
+---
+title: "AI Doesn't Need More Memory. It Needs Better Memory."
+description: "Comparing Cursor, Claude Code, Mem0, Pieces, and the emerging category of Decision Memory."
+pubDate: 2026-06-07
+author: 'Kawa Code'
+tags: ['decision-genomics', 'ai-memory', 'ai-agents']
+draft: false
+---
+
+import { Image } from 'astro:assets';
+import Hl from '../../../components/blog/Hl.astro';
+import ComparisonTable from '../../../components/blog/ComparisonTable.astro';
+import aiMemoryApproaches from '../../../assets/blog/ai-harness-memory-approaches.jpg';
+import aiDecisionGenomics from '../../../assets/blog/ai-decision-genomics.jpg';
+
+The AI coding ecosystem is rapidly converging on a common idea: memory.
+
+Tools such as Cursor, Claude Code, Mem0, Pieces, and many emerging AI agent frameworks all recognize the same fundamental problem. Software projects live for years, while AI assistants live for minutes. Every new session begins with partial amnesia, forcing developers and agents to repeatedly rediscover context that was already known.
+
+The industry's first response has been straightforward: store more information. Conversation history, code snippets, documentation, timelines, browser activity, workflow recordings, and vector databases all help preserve knowledge that would otherwise be lost.
+
+Yet as we looked at the emerging landscape of AI memory systems, we noticed something interesting:
+
+Not all memory systems are trying to solve the same problem.
+
+<Image
+  src={aiMemoryApproaches}
+  alt="AI harness approaches to memory: giving the AI more context, teaching it more facts, and recording everything."
+  class="my-8 w-full rounded-xl border border-kawa-border"
+  widths={[480, 800, 1200]}
+  sizes="(max-width: 768px) 100vw, 768px"
+/>
+
+## The Three Approaches to AI Memory Today
+
+Most products in this space fall into one of three categories.
+
+### 1. Give the AI More Context
+
+Cursor, Claude Code, Windsurf, and other such tools primarily focus on maximizing the amount of context available to the model during a coding session. Rules, chat history, project files, documentation, and retrieved snippets are combined into a large working context window.
+
+This works remarkably well for short and medium-duration tasks. The model can reason over substantial amounts of information and maintain momentum across a session.
+
+The challenge appears as projects grow.
+
+As more information accumulates, relevance becomes the bottleneck. The information exists, but both humans and AI struggle to determine which parts matter for the current task. Teams often describe this phenomenon as "context bloat."
+
+### 2. Teach the AI More Facts
+
+Systems like Mem0, Letta, and RAG-based agent frameworks focus on extracting facts, summaries, entities, and relationships from conversations and interactions. Instead of storing entire conversations, they attempt to identify durable information worth remembering, things like architectural facts, user preferences, and even long-term agent knowledge.
+
+This represents a major improvement over simple conversation history because the memory becomes searchable and structured. The system becomes better at answering "What do we know?" but not necessarily "Why did we decide this?". The system does not understand whether something was a decision, if it was superseded, what options were considered at the time, whether it was a temporary workaround, etc. The primary unit of memory remains a fact, summary, or relationship rather than the reasoning process that produced it.
+
+For software engineering, this works surprisingly well for documentation, API references, architecture documents, and runbooks. Their challenge is preserving the reasoning behind how that knowledge evolved over time.
+
+To understand better, let's look at an example:
+
+A fact is: `We use RabbitMQ`.
+
+A decision is:
+
+```
+Use RabbitMQ for all events.
+
+Alternatives considered: Kafka, SQS
+Reason: Few events per hour, operational simplicity, while complex structuring with exchanges
+Constraint: Small platform team
+Date: March 2026
+
+Status: Superseded by D089F39, May 2026
+```
+
+### 3. Record Everything
+
+Pieces takes a different approach. Rather than focusing only on conversations or code, it captures the broader workflow surrounding software development. Code edits, copied snippets, websites visited, AI conversations, desktop activity, and development history become part of a searchable timeline.
+
+This creates an impressive form of <strong>episodic memory</strong>.
+
+Developers can reconstruct what happened yesterday, last week, or last month with far greater accuracy than relying on memory alone. The question Pieces answers exceptionally well is "What was I doing?".
+
+It is our viewpoint that software projects are ultimately shaped by decisions, not activities. Knowing the summary of a meeting is useful, but immediately knowing why a particular micro-architecture was chosen by your AI agent is often more valuable. The current state of a project is only the final snapshot of thousands of decisions. Without understanding how those decisions evolved, both humans and AI agents are forced to repeatedly rediscover the same reasoning.
+
+
+## The Missing Layer: Decision Memory
+
+When we analyzed long-running software projects, we found that the most expensive mistakes rarely stemmed from lack of documentation or from a poor knowledge graph. Instead, bugs and broken features arise from forgotten decisions. 
+
+A new engineer starts a discussion about a design that was already invalidated months ago. An AI agent implements a solution that was previously rejected. Or it analyzes only the present "facts" and surrounding code, and decides to fix the bug at a superficial level, even though 2 weeks ago another agent implemented a carefully planned utility that solves many of the issues and it only needs to be integrated.
+
+The information often still exists somewhere inside git history, pull requests, issue trackers, Slack conversations, or AI chat histories. The problem is that the decision itself was never captured as a first-class object.
+
+<Image
+  src={aiDecisionGenomics}
+  alt="New AI layer: Decision Genomics, where the gene metaphor is the intent and decision of every human of AI agent."
+  class="my-8 w-full rounded-xl border border-kawa-border"
+  widths={[480, 800, 1200]}
+  sizes="(max-width: 768px) 100vw, 768px"
+/>
+
+## Kawa Code and Decision Genomics
+
+As AI coding workflows mature, many organizations are discovering that the problem is not the inability to store information. The problem is <Hl>deciding which information deserves to be included</Hl>.
+
+Kawa Code was built around what we believe is the most valuable artifact in software development: the graph of all micro-decisions made by humans and AI agents.
+
+Rather than focusing exclusively on accumulating every little thing you do, Kawa Code automatically extracts and structures the evolution of decisions made by all participants to a project, human and AI alike.
+
+* You submit a new prompt? Kawa Code infers your intentions and records them.
+* You pick an option among many? Kawa Code records and validates that decision.
+* The agent considers multiple options and picks one? Kawa Code records the trade-offs considered.
+* You or your agent discover new constraints? Kawa Code automatically records them for the future.
+* You tried something and abandoned it? Kawa Code records it as a rejected alternative.
+* You discuss with your AI the pros and cons of an architecture? Kawa Code records that architectural rationale.
+
+These decisions are attached to the code they influence, survive across branches and rebases, and evolve as projects evolve. Older decisions can be superseded or deprecated instead of remaining permanently active, like in a RAG system. The goal here is not to preserve everything, but to preserve what matters, to various degrees of importance, and automatically use those pieces of information for each task an agent works on.
+
+We call this approach <Hl>Decision Genomics</Hl>. Just as DNA preserves the evolutionary history of an organism, decision graphs preserve the evolutionary history of a software project. Future developers and AI agents can understand not only what exists today, but why it exists.
+
+And unlike most memory systems, these decision graphs are shared across humans and AI agents, creating a common reasoning layer for the <Hl>entire team</Hl>.
+
+<ComparisonTable
+  headers={['Approach', 'Examples', 'The question it answers']}
+  highlightColumn={2}
+  highlightRow={3}
+  caption="Four lenses on AI memory — and the question each one is built to answer."
+  rows={[
+    ['Give the AI more context', 'Cursor, Claude Code, Windsurf', '"What information might matter?"'],
+    ['Teach the AI more facts', 'Mem0, Letta', '"What do we know?"'],
+    ['Record everything', 'Pieces', '"What was I doing?"'],
+    ['Remember Why', 'Kawa Code', '"Why did we decide this?"'],
+  ]}
+/>
+
+This has an important side effect. By focusing on decisions, constraints, and rationale instead of entire histories, Kawa Code can often provide dramatically smaller contexts to AI assistants. Rather than replaying months of conversations and documentation, the system surfaces only the reasoning most relevant to the current task. For organizations operating dozens or hundreds of AI agents, this can translate directly into <Hl>lower inference costs and higher throughput</Hl>.
+
+As AI adoption grows and token costs become a meaningful operational expense, we believe the future of AI memory will be measured not only by recall quality, but by compression quality: how effectively a system can preserve the reasoning behind a project while minimizing the amount of information that must be sent to the model.
+
+## Beyond Memory
+
+The future challenge for AI-assisted software development is unlikely to be code generation. Models are already becoming exceptionally capable at producing code.
+
+The harder problem is maintaining coherence across thousands of decisions made by humans and AI over months or years. Memory systems are an important part of that future. 
+
+We believe the next generation of developer tooling will be defined by how effectively it captures, evolves, and surfaces the decisions that shape a project.
+
+Not more memory. <Hl>Better memory.</Hl>

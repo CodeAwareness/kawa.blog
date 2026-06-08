@@ -1,19 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { useTranslations, parsePostId } from '../i18n/utils';
+import { useTranslations } from '../i18n/utils';
+import { getPublishedPosts } from '../lib/posts';
 import { type Lang } from '../i18n/ui';
 
 const lang: Lang = 'en';
 const t = useTranslations(lang);
 
-const posts = (
-  await getCollection('blog', ({ data }) => (import.meta.env.PROD ? !data.draft : true))
-)
-  .map((post) => ({ post, meta: parsePostId(post.id) }))
-  .filter(({ meta }) => meta.lang === lang)
-  .sort((a, b) => b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf());
+const posts = await getPublishedPosts(lang);
 
 const alternates = { en: '/', ja: '/ja/' };
 ---

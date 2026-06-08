@@ -10,9 +10,11 @@ interface Props {
   caption?: string;
   /** Highlight a column index (e.g. the "with Kawa Code" column). */
   highlightColumn?: number;
+  /** Highlight a row index in brand gold (e.g. the Kawa Code row). */
+  highlightRow?: number;
 }
 
-const { headers, rows, caption, highlightColumn } = Astro.props;
+const { headers, rows, caption, highlightColumn, highlightRow } = Astro.props;
 ---
 
 <figure class="my-8 overflow-x-auto">
@@ -36,21 +38,26 @@ const { headers, rows, caption, highlightColumn } = Astro.props;
     </thead>
     <tbody>
       {
-        rows.map((row) => (
-          <tr class="border-b border-kawa-border/60">
-            {row.map((cell, i) => (
-              <td
-                class:list={[
-                  'px-4 py-3 align-top',
-                  i === 0 ? 'font-medium text-kawa-text' : 'text-kawa-muted',
-                  i === highlightColumn && 'bg-kawa-accent/5 text-kawa-text',
-                ]}
-              >
-                {cell}
-              </td>
-            ))}
-          </tr>
-        ))
+        rows.map((row, rowIndex) => {
+          const isHlRow = rowIndex === highlightRow;
+          return (
+            <tr class="border-b border-kawa-border/60">
+              {row.map((cell, i) => (
+                <td
+                  class:list={[
+                    'px-4 py-3 align-top',
+                    // Gold row wins across the whole row, overriding column tint.
+                    isHlRow && 'bg-kawa-gold/10 font-semibold text-kawa-gold-light',
+                    !isHlRow && (i === 0 ? 'font-medium text-kawa-text' : 'text-kawa-muted'),
+                    !isHlRow && i === highlightColumn && 'bg-kawa-accent/5 text-kawa-text',
+                  ]}
+                >
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          );
+        })
       }
     </tbody>
   </table>
