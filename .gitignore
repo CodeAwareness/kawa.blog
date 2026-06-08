@@ -26,3 +26,8 @@ pnpm-debug.log*
 # cloudflare / wrangler
 .wrangler/
 .dev.vars
+
+# editor swap / temp files
+*.swp
+*.swo
+*~
