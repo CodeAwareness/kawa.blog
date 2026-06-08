@@ -1,0 +1,39 @@
+---
+import { languages, type Lang } from '../i18n/ui';
+import { localizedPath } from '../i18n/utils';
+
+interface Props {
+  /** Currently active language. */
+  lang: Lang;
+  /**
+   * Explicit per-language URLs for the current page (used on post pages so the
+   * switcher points at the translated post). Falls back to the locale homepage.
+   */
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const { lang, alternates = {} } = Astro.props;
+const langs = Object.keys(languages) as Lang[];
+---
+
+<nav class="flex items-center gap-1 text-sm" aria-label="Language">
+  {
+    langs.map((code, i) => (
+      <>
+        {i > 0 && <span class="text-kawa-border">/</span>}
+        {code === lang ? (
+          <span class="px-2 py-1 font-semibold text-kawa-text" aria-current="true">
+            {languages[code]}
+          </span>
+        ) : (
+          <a
+            class="px-2 py-1 text-kawa-muted transition-colors hover:text-kawa-accent"
+            href={alternates[code] ?? localizedPath('/', code)}
+          >
+            {languages[code]}
+          </a>
+        )}
+      </>
+    ))
+  }
+</nav>

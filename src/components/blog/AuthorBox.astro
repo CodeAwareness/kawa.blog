@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Byline / author bio block, typically placed at the foot of a post.
+//   <AuthorBox name="Mark Vasile" role="Founder, Kawa Code" bio="…" />
+interface Props {
+  name: string;
+  role?: string;
+  bio?: string;
+  avatar?: ImageMetadata;
+}
+
+const { name, role, bio, avatar } = Astro.props;
+const initials = name
+  .split(' ')
+  .map((p) => p[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+
+<aside class="mt-12 flex items-start gap-4 rounded-xl border border-kawa-border bg-kawa-surface/40 p-5">
+  {
+    avatar ? (
+      <Image
+        src={avatar}
+        alt={name}
+        width={56}
+        height={56}
+        class="h-14 w-14 shrink-0 rounded-full border border-kawa-border object-cover"
+      />
+    ) : (
+      <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-kawa-border bg-kawa-bg text-sm font-semibold text-kawa-accent">
+        {initials}
+      </span>
+    )
+  }
+  <div>
+    <p class="font-semibold text-kawa-text">{name}</p>
+    {role && <p class="text-sm text-kawa-accent">{role}</p>}
+    {bio && <p class="mt-1 text-sm text-kawa-muted">{bio}</p>}
+  </div>
+</aside>

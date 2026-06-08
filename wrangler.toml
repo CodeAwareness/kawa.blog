@@ -1,0 +1,6 @@
+# Cloudflare Pages configuration.
+# `pages_build_output_dir` tells Wrangler / the Pages Git integration where the
+# built static site lives. Astro's static build emits to ./dist.
+name = "kawa-blog"
+compatibility_date = "2025-06-01"
+pages_build_output_dir = "./dist"

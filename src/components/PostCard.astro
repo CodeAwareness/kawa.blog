@@ -1,0 +1,32 @@
+---
+import { type Lang } from '../i18n/ui';
+import { postUrl } from '../i18n/utils';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+}
+
+const { lang, slug, title, description, pubDate, tags = [] } = Astro.props;
+---
+
+<article
+  class="group rounded-xl border border-kawa-border bg-kawa-surface/40 p-5 transition-colors hover:border-kawa-accent/60"
+>
+  <a href={postUrl(lang, slug)} class="block">
+    <div class="mb-2 flex items-center gap-3 text-xs text-kawa-muted">
+      <FormattedDate date={pubDate} lang={lang} />
+      {tags.length > 0 && <span aria-hidden="true">·</span>}
+      {tags.slice(0, 3).map((tag) => <span class="text-kawa-accent">#{tag}</span>)}
+    </div>
+    <h2 class="mb-1 text-lg font-semibold tracking-tight group-hover:text-kawa-accent">
+      {title}
+    </h2>
+    <p class="text-sm text-kawa-muted">{description}</p>
+  </a>
+</article>

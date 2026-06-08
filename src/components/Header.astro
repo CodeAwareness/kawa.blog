@@ -1,0 +1,25 @@
+---
+import { type Lang } from '../i18n/ui';
+import { useTranslations, localizedPath } from '../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Logo from './Logo.astro';
+
+interface Props {
+  lang: Lang;
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const { lang, alternates } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<header class="border-b border-kawa-border bg-kawa-bg/80 backdrop-blur">
+  <div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-5 py-4">
+    <a href={localizedPath('/', lang)} class="flex items-center gap-2.5 font-semibold tracking-tight">
+      <Logo size={28} />
+      <span>{t('site.title')}</span>
+    </a>
+
+    <LanguageSwitcher lang={lang} alternates={alternates} />
+  </div>
+</header>

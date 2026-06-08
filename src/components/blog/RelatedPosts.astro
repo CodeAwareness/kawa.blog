@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import { type Lang } from '../../i18n/ui';
+import { useTranslations, parsePostId } from '../../i18n/utils';
+import PostCard from '../PostCard.astro';
+
+// Shows up to `limit` posts in the same language, ranked by shared tags,
+// falling back to the most recent. Excludes the current post.
+interface Props {
+  lang: Lang;
+  currentSlug: string;
+  tags?: string[];
+  limit?: number;
+}
+
+const { lang, currentSlug, tags = [], limit = 3 } = Astro.props;
+const t = useTranslations(lang);
+
+const candidates = (await getCollection('blog', ({ data }) => !data.draft))
+  .map((post) => ({ post, meta: parsePostId(post.id) }))
+  .filter(({ meta }) => meta.lang === lang && meta.slug !== currentSlug);
+
+const ranked = candidates
+  .map((c) => ({
+    ...c,
+    score: c.post.data.tags.filter((tag) => tags.includes(tag)).length,
+  }))
+  .sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf();
+  })
+  .slice(0, limit);
+---
+
+{
+  ranked.length > 0 && (
+    <section class="mt-16 border-t border-kawa-border pt-8">
+      <h2 class="mb-5 text-sm font-semibold uppercase tracking-wider text-kawa-muted">
+        {t('related.heading')}
+      </h2>
+      <div class="grid gap-4">
+        {ranked.map(({ post, meta }) => (
+          <PostCard
+            lang={lang}
+            slug={meta.slug}
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}

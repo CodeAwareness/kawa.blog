@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import { type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Per-language URLs for this page, used for hreflang + the switcher. */
+  alternates?: Partial<Record<Lang, string>>;
+  /** Absolute or root-relative OG image URL. */
+  image?: string;
+}
+
+const { lang, title, description, alternates = {}, image } = Astro.props;
+const t = useTranslations(lang);
+
+const pageTitle = title ? `${title} — ${t('site.title')}` : t('site.title');
+const pageDescription = description ?? t('site.tagline');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+
+    {/* hreflang alternates for bilingual SEO */}
+    {
+      Object.entries(alternates).map(([code, href]) => (
+        <link rel="alternate" hreflang={code} href={new URL(href, Astro.site).href} />
+      ))
+    }
+    {
+      alternates.en && (
+        <link rel="alternate" hreflang="x-default" href={new URL(alternates.en, Astro.site).href} />
+      )
+    }
+
+    {/* Open Graph / Twitter */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+
+    <link rel="alternate" type="application/rss+xml" title={t('site.title')} href="/rss.xml" />
+
+    {/* Per-page <head> extras, e.g. JSON-LD structured data. */}
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <Header lang={lang} alternates={alternates} />
+    <main class="mx-auto w-full max-w-3xl flex-1 px-5 py-10">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

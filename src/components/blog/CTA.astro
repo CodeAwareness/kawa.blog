@@ -1,0 +1,61 @@
+---
+import { type Lang } from '../../i18n/ui';
+
+// Soft, single-action call-to-action for the end of a post (product funnel).
+//   <CTA lang="en" variant="beta" />
+//   <CTA lang="en" variant="docs" href="https://kawacode.ai/docs" />
+//
+// TODO: point these hrefs at the real destinations once they exist.
+type Variant = 'docs' | 'trial' | 'beta' | 'context';
+
+interface Props {
+  lang: Lang;
+  variant?: Variant;
+  /** Override the default link for this variant. */
+  href?: string;
+  /** Override the default button label. */
+  label?: string;
+  /** Override the default body line. */
+  text?: string;
+}
+
+const { lang, variant = 'beta', href, label, text } = Astro.props;
+
+const copy: Record<Variant, Record<Lang, { text: string; label: string; href: string }>> = {
+  docs: {
+    en: { text: 'Want the full picture?', label: 'Read the Kawa Code docs', href: 'https://kawacode.ai/docs' },
+    ja: { text: '全体像を知りたいですか？', label: 'Kawa Code のドキュメントを読む', href: 'https://kawacode.ai/docs' },
+  },
+  trial: {
+    en: { text: 'Ready to try it on your own codebase?', label: 'Start the 14-day trial', href: 'https://kawacode.ai' },
+    ja: { text: '自分のコードベースで試してみませんか？', label: '14日間の無料トライアルを始める', href: 'https://kawacode.ai' },
+  },
+  beta: {
+    en: { text: 'Building with AI agents on a team?', label: 'Join the private beta', href: 'https://kawacode.ai' },
+    ja: { text: 'チームでAIエージェントを使っていますか？', label: 'プライベートベータに参加する', href: 'https://kawacode.ai' },
+  },
+  context: {
+    en: { text: 'Tired of context bloat in your prompts?', label: 'See how Kawa Code helps', href: 'https://kawacode.ai' },
+    ja: { text: 'プロンプトのコンテキスト肥大に悩んでいませんか？', label: 'Kawa Code の仕組みを見る', href: 'https://kawacode.ai' },
+  },
+};
+
+const c = copy[variant][lang];
+const finalHref = href ?? c.href;
+const finalLabel = label ?? c.label;
+const finalText = text ?? c.text;
+const external = finalHref.startsWith('http');
+---
+
+<aside
+  class="my-10 flex flex-col items-start gap-4 rounded-xl border border-kawa-border bg-kawa-surface/60 px-6 py-6 sm:flex-row sm:items-center sm:justify-between"
+>
+  <p class="text-base font-medium text-kawa-text">{finalText}</p>
+  <a
+    href={finalHref}
+    class="inline-flex shrink-0 items-center rounded-lg bg-kawa-accent px-4 py-2 text-sm font-semibold text-kawa-bg transition-colors hover:bg-kawa-accent-strong"
+    {...external ? { rel: 'noopener', target: '_blank' } : {}}
+  >
+    {finalLabel}
+  </a>
+</aside>

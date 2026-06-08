@@ -1,0 +1,35 @@
+---
+// Callout / "Kawa Insight" box. Use inside MDX for asides, tips, and warnings.
+//   <Callout type="insight">…</Callout>
+//   <Callout type="warning" title="Heads up">…</Callout>
+type CalloutType = 'info' | 'insight' | 'tip' | 'warning';
+
+interface Props {
+  type?: CalloutType;
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const styles: Record<CalloutType, { border: string; label: string; icon: string }> = {
+  info: { border: 'border-l-kawa-accent', label: 'Note', icon: 'ℹ' },
+  insight: { border: 'border-l-kawa-accent-strong', label: 'Kawa Insight', icon: '◆' },
+  tip: { border: 'border-l-emerald-400', label: 'Tip', icon: '✓' },
+  warning: { border: 'border-l-amber-400', label: 'Heads up', icon: '⚠' },
+};
+
+const s = styles[type];
+const heading = title ?? s.label;
+---
+
+<aside
+  class={`my-6 rounded-r-lg border border-kawa-border border-l-4 ${s.border} bg-kawa-surface/50 px-5 py-4`}
+>
+  <p class="mb-1 flex items-center gap-2 text-sm font-semibold tracking-wide text-kawa-text">
+    <span aria-hidden="true">{s.icon}</span>
+    <span>{heading}</span>
+  </p>
+  <div class="callout-body text-sm text-kawa-muted [&>*:last-child]:mb-0">
+    <slot />
+  </div>
+</aside>

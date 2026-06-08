@@ -1,0 +1,14 @@
+---
+// Inline keyword highlight for MDX. Mirrors kawacode.ai's highlight classes:
+//   <Hl>decision genomics</Hl>     gold   (.highlight-gold)
+//   <Hl c="blue">intent</Hl>       blue   (.highlight)
+interface Props {
+  c?: 'gold' | 'blue';
+}
+
+const { c = 'gold' } = Astro.props;
+const cls =
+  c === 'blue' ? 'text-kawa-accent' : 'font-semibold text-kawa-gold-light';
+---
+
+<span class={cls}><slot /></span>

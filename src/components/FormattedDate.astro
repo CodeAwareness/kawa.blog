@@ -1,0 +1,18 @@
+---
+import { type Lang } from '../i18n/ui';
+
+interface Props {
+  date: Date;
+  lang: Lang;
+}
+
+const { date, lang } = Astro.props;
+const locale = lang === 'ja' ? 'ja-JP' : 'en-US';
+const formatted = new Intl.DateTimeFormat(locale, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(date);
+---
+
+<time datetime={date.toISOString()}>{formatted}</time>

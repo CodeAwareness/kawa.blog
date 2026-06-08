@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { parsePostId, postUrl } from '../../i18n/utils';
+import { type Lang } from '../../i18n/ui';
+
+const LANG: Lang = 'ja';
+
+export const getStaticPaths = (async () => {
+  const all = await getCollection('blog');
+  const byLang = all.map((post) => ({ post, meta: parsePostId(post.id) }));
+
+  return byLang
+    .filter(({ meta }) => meta.lang === 'ja')
+    .map(({ post, meta }) => {
+      const hasEn = byLang.some((p) => p.meta.lang === 'en' && p.meta.slug === meta.slug);
+      const alternates: Partial<Record<Lang, string>> = { ja: postUrl('ja', meta.slug) };
+      if (hasEn) alternates.en = postUrl('en', meta.slug);
+
+      return { params: { slug: meta.slug }, props: { post, alternates } };
+    });
+}) satisfies GetStaticPaths;
+
+const { post, alternates } = Astro.props;
+const { slug } = parsePostId(post.id);
+const { Content } = await render(post);
+---
+
+<BlogPost
+  lang={LANG}
+  slug={slug}
+  title={post.data.title}
+  description={post.data.description}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  author={post.data.author}
+  tags={post.data.tags}
+  heroImage={post.data.heroImage}
+  alternates={alternates}
+>
+  <Content />
+</BlogPost>

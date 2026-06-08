@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+
+/* Kawa Code blog theme tokens. */
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Helvetica Neue',
+    'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+  --font-serif: ui-serif, Georgia, 'Hiragino Mincho ProN', 'Noto Serif JP', serif;
+
+  /* Brand palette — synced from kawacode.ai (style2.css :root). */
+  --color-kawa-bg: #0d1117;
+  --color-kawa-surface: #161b22;
+  --color-kawa-border: #30363d;
+  --color-kawa-text: #e6edf3; /* --text */
+  --color-kawa-muted: #8b949e; /* --text-2 */
+
+  /* Brand blue (primary accent). */
+  --color-kawa-accent: #2e9bd6; /* --blue-light */
+  --color-kawa-accent-strong: #007dc5; /* --blue */
+
+  /* Brand gold (keyword highlight). */
+  --color-kawa-gold: #fbb03b; /* --gold */
+  --color-kawa-gold-light: #fcc56a; /* --gold-light */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-kawa-bg);
+  color: var(--color-kawa-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Long-form article typography, kept dependency-free. */
+.prose {
+  max-width: 70ch;
+  line-height: 1.75;
+}
+.prose h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-kawa-text);
+}
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.prose p {
+  margin-bottom: 1.25rem;
+  color: var(--color-kawa-text);
+}
+.prose a {
+  color: var(--color-kawa-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* Bold stays neutral (matches kawacode.ai); use <Hl> for colored keywords. */
+.prose strong {
+  color: var(--color-kawa-text);
+  font-weight: 600;
+}
+/* Italic = subtle brand blue, mirroring kawacode.ai's `.prose em`. */
+.prose em {
+  color: var(--color-kawa-accent);
+  font-style: italic;
+}
+.prose ul,
+.prose ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin-bottom: 0.5rem;
+}
+.prose code {
+  background-color: var(--color-kawa-surface);
+  border: 1px solid var(--color-kawa-border);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.9em;
+}
+.prose pre {
+  background-color: var(--color-kawa-surface);
+  border: 1px solid var(--color-kawa-border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.prose blockquote {
+  border-left: 3px solid var(--color-kawa-accent);
+  padding-left: 1rem;
+  color: var(--color-kawa-muted);
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}

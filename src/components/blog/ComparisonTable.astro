@@ -1,0 +1,58 @@
+---
+// Data-driven comparison table with consistent styling.
+//   <ComparisonTable
+//     headers={['', 'Without Kawa Code', 'With Kawa Code']}
+//     rows={[['Context', 'Lost at merge', 'Captured as decisions']]}
+//   />
+interface Props {
+  headers: string[];
+  rows: string[][];
+  caption?: string;
+  /** Highlight a column index (e.g. the "with Kawa Code" column). */
+  highlightColumn?: number;
+}
+
+const { headers, rows, caption, highlightColumn } = Astro.props;
+---
+
+<figure class="my-8 overflow-x-auto">
+  <table class="w-full border-collapse text-sm">
+    <thead>
+      <tr class="border-b border-kawa-border">
+        {
+          headers.map((h, i) => (
+            <th
+              scope="col"
+              class:list={[
+                'px-4 py-3 text-left font-semibold',
+                i === highlightColumn ? 'text-kawa-accent' : 'text-kawa-text',
+              ]}
+            >
+              {h}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row) => (
+          <tr class="border-b border-kawa-border/60">
+            {row.map((cell, i) => (
+              <td
+                class:list={[
+                  'px-4 py-3 align-top',
+                  i === 0 ? 'font-medium text-kawa-text' : 'text-kawa-muted',
+                  i === highlightColumn && 'bg-kawa-accent/5 text-kawa-text',
+                ]}
+              >
+                {cell}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  {caption && <figcaption class="mt-2 text-xs text-kawa-muted">{caption}</figcaption>}
+</figure>

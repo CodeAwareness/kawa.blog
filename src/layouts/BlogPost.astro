@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { type Lang } from '../i18n/ui';
+import { useTranslations, localizedPath } from '../i18n/utils';
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import RelatedPosts from '../components/blog/RelatedPosts.astro';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  author?: string;
+  tags?: string[];
+  heroImage?: ImageMetadata;
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const {
+  lang,
+  slug,
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  author = 'Kawa Code',
+  tags = [],
+  heroImage,
+  alternates,
+} = Astro.props;
+
+const t = useTranslations(lang);
+
+// JSON-LD Article structured data.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Branded, build-time generated social card (see src/pages/og/[...route].ts).
+const ogImagePath = `/og/${lang}/${slug}.png`;
+const ogImage = new URL(ogImagePath, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  inLanguage: lang,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  author: { '@type': 'Organization', name: author },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Kawa Code',
+    url: 'https://kawacode.ai',
+  },
+  keywords: tags.join(', '),
+  ...(ogImage ? { image: ogImage } : {}),
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  alternates={alternates}
+  image={ogImagePath}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(jsonLd)}
+  />
+  <article>
+    <header class="mb-8 border-b border-kawa-border pb-8">
+      <a
+        href={localizedPath('/', lang)}
+        class="text-sm text-kawa-muted transition-colors hover:text-kawa-accent"
+      >
+        {t('post.backToBlog')}
+      </a>
+      <h1 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+      <p class="mt-3 text-lg text-kawa-muted">{description}</p>
+      <div class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-kawa-muted">
+        <span>{author}</span>
+        <span aria-hidden="true">·</span>
+        <span>{t('post.publishedOn')}: <FormattedDate date={pubDate} lang={lang} /></span>
+        {
+          updatedDate && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                {t('post.updatedOn')}: <FormattedDate date={updatedDate} lang={lang} />
+              </span>
+            </>
+          )
+        }
+      </div>
+      {
+        tags.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            {tags.map((tag) => (
+              <span class="rounded-full border border-kawa-border px-2 py-0.5 text-kawa-accent">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      heroImage && (
+        <Image
+          src={heroImage}
+          alt={title}
+          class="mb-8 w-full rounded-xl border border-kawa-border"
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 768px) 100vw, 768px"
+        />
+      )
+    }
+
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+
+  <RelatedPosts lang={lang} currentSlug={slug} tags={tags} />
+</BaseLayout>

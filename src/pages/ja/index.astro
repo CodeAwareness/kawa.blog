@@ -1,11 +1,11 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
-import { useTranslations, parsePostId } from '../i18n/utils';
-import { type Lang } from '../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { useTranslations, parsePostId } from '../../i18n/utils';
+import { type Lang } from '../../i18n/ui';
 
-const lang: Lang = 'en';
+const lang: Lang = 'ja';
 const t = useTranslations(lang);
 
 const posts = (
@@ -18,7 +18,7 @@ const posts = (
 const alternates = { en: '/', ja: '/ja/' };
 ---
 
-<BaseLayout lang={lang} alternates={alternates} image="/og/home/en.png">
+<BaseLayout lang={lang} alternates={alternates} image="/og/home/ja.png">
   <section class="mb-12">
     <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{t('home.heading')}</h1>
     <p class="mt-4 max-w-2xl text-lg text-kawa-muted">{t('home.intro')}</p>

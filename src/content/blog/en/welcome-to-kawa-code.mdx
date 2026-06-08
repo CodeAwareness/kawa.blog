@@ -1,0 +1,61 @@
+---
+title: 'Welcome to the Kawa Code Blog'
+description: 'Why we built an AI Decision Manager, and what you can expect from this blog.'
+pubDate: 2026-06-07
+author: 'Kawa Code'
+tags: ['announcement', 'decision-genomics']
+draft: false
+---
+
+import Callout from '../../../components/blog/Callout.astro';
+import ComparisonTable from '../../../components/blog/ComparisonTable.astro';
+import CTA from '../../../components/blog/CTA.astro';
+import Hl from '../../../components/blog/Hl.astro';
+
+Welcome. This is the home for everything we're learning while building **Kawa Code**, an
+**AI Decision Manager** for engineering teams.
+
+## Why this exists
+
+AI coding agents are remarkable at writing code, but they work with a thin slice of context: the
+files in front of them and whatever you can fit into a prompt. The *reasoning* behind your codebase —
+why a tradeoff was made, which approach was abandoned, what constraint a module must respect — lives
+in people's heads, in closed pull requests, and in chat history that no agent will ever read.
+
+We call the missing layer <Hl>Decision Genomics</Hl>: the durable, curated record of developer
+<Hl c="blue">intents</Hl> and <Hl c="blue">decisions</Hl>, surfaced to your AI agents at the exact
+moment they're working on the relevant code.
+
+<Callout type="insight">
+  An AI agent that knows *why* a constraint exists won't propose the change that already failed
+  last quarter. Context isn't just more tokens — it's the right tokens, at the right moment.
+</Callout>
+
+<ComparisonTable
+  headers={['', 'Without Kawa Code', 'With Kawa Code']}
+  highlightColumn={2}
+  rows={[
+    ['Reasoning behind code', 'Lost in closed PRs & chat', 'Captured as durable decisions'],
+    ['Agent context', 'Whatever fits the prompt', 'The relevant decisions, surfaced'],
+    ['Conflicting work', 'Found at merge time', 'Surfaced while still editing'],
+  ]}
+/>
+
+## The four pillars
+
+Kawa Code is organized around a simple loop:
+
+1. **Capture** — record the intent behind a change as you work.
+2. **Curate** — distill those intents into reusable decisions, with the noise stripped out.
+3. **Surface** — feed the relevant subset back to your coding agent when it matters.
+4. **Align** — keep teammates' in-progress work coherent before it ever reaches merge.
+
+## What to expect here
+
+Expect posts on AI-assisted engineering workflows, notes from building the product, and the occasional
+deep dive into how we think about context for coding agents. This blog is published in **English** and
+**日本語** — use the language switcher at the top of any page.
+
+Thanks for reading.
+
+<CTA lang="en" variant="beta" />

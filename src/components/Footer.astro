@@ -1,0 +1,21 @@
+---
+import { type Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-20 border-t border-kawa-border">
+  <div
+    class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-2 px-5 py-8 text-sm text-kawa-muted sm:flex-row"
+  >
+    <p>&copy; {year} Kawa Code. {t('footer.rights')}</p>
+    <a href="https://kawacode.ai" class="transition-colors hover:text-kawa-accent">kawacode.ai</a>
+  </div>
+</footer>
