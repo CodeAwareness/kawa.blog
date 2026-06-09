@@ -1,6 +1,6 @@
 ---
 title: "AI Doesn't Need More Memory. It Needs Better Memory."
-description: "Comparing Cursor, Claude Code, Mem0, Pieces, and the emerging category of Decision Memory."
+description: "Comparing Cursor, Claude Code, Mem0, Pieces, Graphiti, and the emerging category of Decision Memory."
 pubDate: 2026-06-07
 author: 'Kawa Code'
 tags: ['decision-genomics', 'ai-memory', 'ai-agents']
@@ -19,9 +19,7 @@ Tools such as Cursor, Claude Code, Mem0, Pieces, and many emerging AI agent fram
 
 The industry's first response has been straightforward: store more information. Conversation history, code snippets, documentation, timelines, browser activity, workflow recordings, and vector databases all help preserve knowledge that would otherwise be lost.
 
-Yet as we looked at the emerging landscape of AI memory systems, we noticed something interesting:
-
-Not all memory systems are trying to solve the same problem.
+As I looked at the emerging landscape of AI memory systems, I've noticed something interesting: not all memory systems are trying to solve the same problem.
 
 <Image
   src={aiMemoryApproaches}
@@ -39,11 +37,9 @@ Most products in this space fall into one of three categories.
 
 GitHub Copilot, Cursor, Claude Code, and Windsurf primarily focus on maximizing the amount of context available to the model during a coding session. Custom instructions, rules, chat history, project files, documentation, and retrieved snippets are combined into a large working context window.
 
-This works remarkably well for short and medium-duration tasks. The model can reason over substantial amounts of information and maintain momentum across a session.
+This works remarkably well for short and medium-duration tasks. The model can reason over substantial amounts of information and maintain momentum across a session. The challenge appears as projects grow.
 
-The challenge appears as projects grow.
-
-As more information accumulates, relevance becomes the bottleneck. The information exists, but both humans and AI struggle to determine which parts matter for the current task. Teams often describe this phenomenon as "context bloat."
+As more information accumulates, relevance becomes the bottleneck. The information exists, but both humans and AI struggle to determine which parts matter for the current task, and which is just useless accumulation. Teams often describe this phenomenon as "context bloat".
 
 It is telling that this category has already tried to grow past pure context. Cursor shipped a project-level "Memories" feature in 2025 to automatically store facts gleaned from conversations, then removed it again and pointed users back to hand-written Rules. Accumulating more facts, on its own, did not solve the problem.
 
